@@ -6,9 +6,9 @@ Get_Free_Text_Measures <- function(data_set, minimum_unique_threshold=0.9, featu
     # treat as raw text if data over minimum_precent_unique unique
     if (length(unique(as.character(f_vector))) > (nrow(data_set) * minimum_unique_threshold)) {
       data_set[,paste0(f_name, '_word_count')] <- sapply(strsplit(f_vector, " "), length)
-      data_set[,paste0(f_name, '_character_count')] <- nchar(as.character(f_vector))
-      data_set[,paste0(f_name, '_first_word')] <- sapply(strsplit(as.character(f_vector), " "), `[`, 1)
-      data_set[,paste0(f_name, '_second_word')] <- sapply(strsplit(as.character(f_vector), " "), `[`, 2)
+      data_set[,paste0(f_name, '_char_count')] <- nchar(as.character(f_vector))
+      data_set[,paste0(f_name, '_1st_word')] <- sapply(strsplit(as.character(f_vector), " "), `[`, 1)
+      data_set[,paste0(f_name, '_2nd_word')] <- sapply(strsplit(as.character(f_vector), " "), `[`, 2)
       # remove orginal field
       data_set[,f_name] <- NULL
     }
