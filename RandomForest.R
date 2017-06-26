@@ -42,7 +42,9 @@ best_mtry
 # model the data with the train data
 rf_model <- randomForest(x=train_data[,feature_names],
                          y=as.factor(train_data[,outcome_name]),
-                         importance=TRUE, ntree=100, mtry = best_mtry)
+                         importance=TRUE, ntree=100, mtry = best_mtry,
+                         keep.forest = TRUE)
+rf_model
 print(importance(rf_model, type=1)[importance(rf_model, type=1)!=0,])
 
 # test the model with the Area Under the Curve score
@@ -54,4 +56,3 @@ print(roc(response = test_data[,outcome_name],
           predictor = predictions[,2]))
 
 
-# Using caret
