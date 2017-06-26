@@ -144,8 +144,7 @@ Feature_Engineer_Integers <- function(data_set, features_to_ignore=c()) {
           if (length(unique(data_set[,feature_name][!is.na(data_set[,feature_name])])) > 4) {
             # try 4 bins
             data_discretized <- discretize(data_set[,feature_name], disc='equalfreq', nbins=4)
-            data_set[,paste0(feature_name,'_4Bins')] <- data_dis
-            cretized$X
+            data_set[,paste0(feature_name,'_4Bins')] <- data_discretized$X
           }
         }
       }
@@ -177,8 +176,7 @@ Feature_Engineer_Numbers <- function(data_set, features_to_ignore=c()) {
           data_set[,paste0(feature_name, "_rnd")] <- round(x = feature_vector, digits = 0)
           # binning into 2 bins
           data_discretized <- discretize(data_set[,feature_name], disc='equalfreq', nbins=2)
-          data_set[,paste0(feature_name,'_2Bins')] <- data_discreti
-          zed$X
+          data_set[,paste0(feature_name,'_2Bins')] <- data_discretized$X
         }
       }
     }
