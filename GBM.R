@@ -53,7 +53,10 @@ diabetes <- Feature_Engineer_Integers(data_set = diabetes,
                                                              "discharge_disposition_id",
                                                              "admission_source_id"))
 
+dim(diabetes)
+
 nzv <- nearZeroVar(diabetes, saveMetrics = TRUE)
+head(nzv, 20)
 length(rownames(nzv[nzv$nzv==FALSE,]))
 
 diabetes <- diabetes[ , rownames(nzv[nzv$nzv==FALSE,])]
@@ -90,6 +93,7 @@ gbm_caret_model <- train(train_data[,predictor_names],
 summary(gbm_caret_model)
 print(gbm_caret_model)
 
+# predict with the test dataset
 predictions <- predict(object = gbm_caret_model,
                        test_data[,predictor_names],
                        type = "raw")
@@ -99,6 +103,7 @@ print(postResample(pred = predictions,
 
 prop.table(table(as.factor(diabetes[,outcome_name])))
 
+# Score with AUC
 predictions <- predict(object = gbm_caret_model,
                        test_data[,predictor_names],
                        type = "prob")
@@ -106,3 +111,37 @@ head(predictions)
 library(pROC)
 auc <- roc(ifelse(test_data[,outcome_name]=="yes",1,0), predictions[[2]])
 print(auc$auc)
+# Area under the curve: 0.6616
+
+# Model now with Random Forest still using the same trControl (objConbtrol)
+gbm_rf_model <- train(
+  train_data[, predictor_names],
+  as.factor(train_data[, outcome_name]),
+  method = "rf",
+  trControl = objControl,
+  metric = "ROC",
+  preProcess = c("center", "scale")
+)
+
+summary(gbm_rf_model)
+print(gbm_rf_model)
+
+# predict with the test dataset
+predictions <- predict(object = gbm_rf_model,
+                       test_data[,predictor_names],
+                       type = "raw")
+head(predictions)
+print(postResample(pred = predictions,
+                   obs = as.factor(test_data[,outcome_name])))
+
+prop.table(table(as.factor(diabetes[,outcome_name])))
+
+# Score with AUC
+predictions <- predict(object = gbm_rf_model,
+                       test_data[,predictor_names],
+                       type = "prob")
+head(predictions)
+library(pROC)
+auc <- roc(ifelse(test_data[,outcome_name]=="yes",1,0), predictions[[2]])
+print(auc$auc)
+# Area under the curve: 0.6309
